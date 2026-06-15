@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: KOLTrust
+    orgId: 1
+    folder: KOLTrust
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

@@ -1,0 +1,15 @@
+app_env: dev
+api_base_url: http://localhost:8000
+kafka:
+  bootstrap_servers: localhost:9094
+  raw_topic: kol_raw_events
+  processed_topic: kol_processed_events
+cassandra:
+  hosts:
+    - localhost
+  port: 9042
+  keyspace: kol_trust
+storage:
+  dataset_path: dataset
+  serving_path: dataset/serving
+  prediction_path: data/processed

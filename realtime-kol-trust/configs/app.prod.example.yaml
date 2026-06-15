@@ -1,0 +1,12 @@
+app_env: prod
+api_base_url: https://YOUR_FASTAPI_SERVICE.run.app
+kafka:
+  bootstrap_servers: YOUR_GCP_MANAGED_KAFKA_BOOTSTRAP
+  raw_topic: kol_raw_events
+  processed_topic: kol_processed_events
+cassandra:
+  replacement: bigtable
+storage:
+  dataset_path: gs://YOUR_BUCKET/dataset
+  serving_path: gs://YOUR_BUCKET/dataset/serving
+  prediction_path: gs://YOUR_BUCKET/predictions

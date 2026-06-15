@@ -1,0 +1,48 @@
+# One public TikTok username per line, without password/login data.
+# Example format:
+# example_public_username
+
+## Category: Gaming
+mixigaming
+crisdevilgamer7
+mcmisthy
+
+## Category: Travel
+khoailangthang
+todidau
+travip
+
+## Category: Tech
+vatvostudio
+vunguyencoder
+decor.banlamviec
+
+## Category: News
+vietnamtodayvtv
+hanoinews.theanh28
+tiin.vn
+
+## Category: Food
+genjadao
+eatwpeach
+tieumanthaune
+
+## Category: Music
+viechannel.music
+hoangdung.music
+phungkhanhlinh.official
+
+## Category: Automotive
+tipcar.tv
+duongdeofficial
+
+## Category: Business
+vietnambusinessnews
+thanhvu_ecom
+brandsvietnam
+
+## Category: Culture / Lifestyle
+vietnammuonmau
+vanhow.vn
+chau_muoi
+lythehuong

@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+data/raw/*.json
+data/processed/
+dataset/
+ml/models/**/*.joblib
+*.joblib
+logs/
+spark-warehouse/
+metastore_db/
+derby.log
+checkpoints/
+spark-checkpoints/
+.streamlit/secrets.toml

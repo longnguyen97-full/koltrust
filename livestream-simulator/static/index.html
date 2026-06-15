@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KOLTrust Livestream Simulator</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="live-stage">
+        <div class="video-panel">
+          <canvas id="liveCanvas" width="1280" height="720" aria-label="KOL livestream simulation"></canvas>
+          <div class="live-badge"><span></span> LIVE</div>
+          <div class="viewer-pill" id="viewerPill">0 viewers</div>
+          <div class="kol-overlay">
+            <div class="avatar" id="avatar">GL</div>
+            <div>
+              <h1 id="kolName">Glow Lab</h1>
+              <p id="liveTitle">Livestream review my pham va flash sale</p>
+            </div>
+          </div>
+        </div>
+        <aside class="chat-panel">
+          <div class="panel-head">
+            <h2>Realtime chat</h2>
+            <span id="trustBadge" class="trust trusted">trusted</span>
+          </div>
+          <div id="chatList" class="chat-list"></div>
+        </aside>
+      </section>
+
+      <section class="control-strip">
+        <div class="metric">
+          <span>Likes</span>
+          <strong id="likes">0</strong>
+        </div>
+        <div class="metric">
+          <span>Shares</span>
+          <strong id="shares">0</strong>
+        </div>
+        <div class="metric">
+          <span>Comments</span>
+          <strong id="comments">0</strong>
+        </div>
+        <div class="metric">
+          <span>Bot risk</span>
+          <strong id="botRisk">0%</strong>
+        </div>
+        <div class="metric">
+          <span>Sentiment</span>
+          <strong id="sentiment">0.00</strong>
+        </div>
+        <div class="mode-tools">
+          <select id="kolSelect" aria-label="KOL live session"></select>
+          <select id="modeSelect" aria-label="Simulation mode">
+            <option value="normal">Normal</option>
+            <option value="viral">Viral spike</option>
+            <option value="bot_attack">Bot attack</option>
+            <option value="trust_drop">Trust drop</option>
+          </select>
+          <button id="resetButton" type="button">Reset</button>
+          <a href="/docs" target="_blank" rel="noreferrer">API docs</a>
+        </div>
+      </section>
+
+      <section class="api-band">
+        <div>
+          <h2>Export API</h2>
+          <p id="liveId">live_id: -</p>
+        </div>
+        <div class="endpoint-grid">
+          <a id="bundleLink" href="/api/export/bundle" target="_blank" rel="noreferrer">/api/export/bundle</a>
+          <a id="featuresLink" href="/api/export/features" target="_blank" rel="noreferrer">/api/export/features</a>
+          <a id="eventsLink" href="/api/export/kol_events.jsonl" target="_blank" rel="noreferrer">/api/export/kol_events.jsonl</a>
+        </div>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

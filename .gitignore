@@ -1,0 +1,71 @@
+# Python generated files
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+wheels/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Logs and runtime state
+logs/
+*.log
+*.pid
+*.sqlite
+*.sqlite3
+*.db
+airflow/logs/
+airflow/*.db
+airflow/webserver_config.py
+
+# Data lake / generated datasets
+data-pipeline/data/raw/
+data-pipeline/data/processed/
+realtime-kol-trust/dataset/
+realtime-kol-trust/data/processed/
+
+# Model artifacts
+realtime-kol-trust/ml/models/**/*.joblib
+*.joblib
+*.pkl
+*.pickle
+
+# Spark / Hadoop / checkpoint outputs
+spark-warehouse/
+metastore_db/
+derby.log
+checkpoints/
+spark-checkpoints/
+*.crc
+_SUCCESS
+
+# Frontend / notebook / editor caches
+node_modules/
+.ipynb_checkpoints/
+.streamlit/secrets.toml
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
