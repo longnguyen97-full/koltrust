@@ -1,0 +1,4 @@
+platform,creator_id,content_id,human_trust_score,human_trust_label,human_is_suspicious,label_reason,annotator,labeled_at
+youtube,UC-uNVV92llYIMC5-ZUF0Q4w,3xMaGHhCLrA,82,high_trust,0,"N?i dung ?n, engagement t? nhiên",ann_01,6/16/2026
+youtube,UCdouf4Nk-opU7-J1VMrRHsw,h_JMBMifKGo,35,low_trust,1,"Engagement b?t thu?ng, comment l?p",ann_01,6/16/2026
+tiktok,creator123,video456,60,medium_trust,0,Thi?u b?ng ch?ng x?u nhung sentiment trung bình,ann_02,6/16/2026
