@@ -1,6 +1,6 @@
-# KOLTrust Big Data
+# KOLTrust
 
-Hệ thống Big Data mô phỏng quy trình đánh giá độ tin cậy của KOL/Creator từ dữ liệu mạng xã hội và sự kiện realtime.
+Hệ thống KOLTrust mô phỏng quy trình đánh giá độ tin cậy của KOL/Creator từ dữ liệu mạng xã hội và sự kiện realtime.
 
 ## Thành phần chính
 
