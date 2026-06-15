@@ -30,7 +30,6 @@ from ml.inference.trust_model import predict_kol_trust, sentiment_score as train
 
 KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
 RAW_TOPIC = os.getenv("KAFKA_RAW_TOPIC", "kol_raw_events")
-PROCESSED_TOPIC = os.getenv("KAFKA_PROCESSED_TOPIC", "kol_processed_events")
 CASSANDRA_HOSTS = os.getenv("CASSANDRA_HOSTS", "cassandra")
 CASSANDRA_KEYSPACE = os.getenv("CASSANDRA_KEYSPACE", "kol_trust")
 CHECKPOINT_DIR = os.getenv("SPARK_CHECKPOINT_DIR", "/tmp/spark-checkpoints/kol-trust")

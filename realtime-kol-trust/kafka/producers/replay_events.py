@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import random
 import sys
 import time
@@ -19,7 +20,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from app.core.config import settings
 
 DEFAULT_SAMPLE_PATH = PROJECT_ROOT / "dataset" / "serving" / "kol_events.jsonl"
-DEFAULT_SIMULATOR_BASE_URL = "http://simulator:8010"
+DEFAULT_SIMULATOR_BASE_URL = os.getenv("SIMULATOR_BASE_URL", "http://localhost:8010")
 
 
 def utc_now() -> str:
@@ -125,9 +126,9 @@ def produce_payload(producer: Producer, topic: str, payload: dict[str, Any]) -> 
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Replay KOL sample events into Kafka.")
+    parser = argparse.ArgumentParser(description="Produce simulator or sample-file KOL events into Kafka.")
     parser.add_argument("--input", default=str(DEFAULT_SAMPLE_PATH))
-    parser.add_argument("--source", choices=["simulator", "file"], default="file")
+    parser.add_argument("--source", choices=["simulator", "file"], default="simulator")
     parser.add_argument("--simulator-base-url", default=DEFAULT_SIMULATOR_BASE_URL)
     parser.add_argument("--topic", default=settings.kafka_raw_topic)
     parser.add_argument("--bootstrap-servers", default=settings.kafka_bootstrap_servers)

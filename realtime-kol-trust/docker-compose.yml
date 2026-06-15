@@ -80,7 +80,6 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_RAW_TOPIC: kol_raw_events
-      KAFKA_PROCESSED_TOPIC: kol_processed_events
       CASSANDRA_HOSTS: cassandra
       CASSANDRA_KEYSPACE: kol_trust
       SPARK_CHECKPOINT_DIR: /tmp/spark-checkpoints/kol-trust

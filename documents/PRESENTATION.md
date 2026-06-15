@@ -213,7 +213,7 @@ airflow/dags/koltrust_pipeline_dag.py
 DAG mô tả flow:
 
 ```text
-build_dataset -> validate_data -> process_sample
+build_dataset -> validate_data
 ```
 
 Airflow chịu trách nhiệm:
@@ -280,19 +280,19 @@ Luồng realtime:
 Livestream Simulator
     |
     v
-kol_events.jsonl / API export
-    |
-    v
 Kafka replay producer
     |
     v
-Kafka topic
+Kafka topic kol_raw_events
     |
     v
 Spark Streaming
     |
     v
-Cassandra
+MinIO raw/processed/serving layers
+    |
+    v
+Cassandra serving table
 ```
 
 Simulator giúp demo các tình huống:
@@ -316,7 +316,7 @@ Nhóm feature chính:
 | Suspicious signals | Dấu hiệu bất thường |
 | Profile reputation | Uy tín nền của KOL |
 
-Output:
+Offline debug output:
 
 ```text
 realtime-kol-trust/data/processed/trust_scores.json
@@ -436,7 +436,7 @@ Publish lên MinIO:
 uv run python -m publish-minio
 ```
 
-Offline scoring:
+Offline scoring debug:
 
 ```powershell
 uv run python -m process-sample

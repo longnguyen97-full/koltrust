@@ -18,7 +18,6 @@ class Settings:
     app_env: str = env("APP_ENV", "dev")
     kafka_bootstrap_servers: str = env("KAFKA_BOOTSTRAP_SERVERS", "localhost:9094")
     kafka_raw_topic: str = env("KAFKA_RAW_TOPIC", "kol_raw_events")
-    kafka_processed_topic: str = env("KAFKA_PROCESSED_TOPIC", "kol_processed_events")
     cassandra_hosts: str = env("CASSANDRA_HOSTS", "localhost")
     cassandra_port: int = env_int("CASSANDRA_PORT", 9042)
     cassandra_keyspace: str = env("CASSANDRA_KEYSPACE", "kol_trust")

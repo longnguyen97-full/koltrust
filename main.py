@@ -134,16 +134,16 @@ def print_commands(_: argparse.Namespace) -> int:
     print(f"1. Simulator API:  uv run --directory \"{SIMULATION_ROOT}\" python -m uvicorn app.main:app --reload --port 8010")
     print(f"2. Realtime API:   uv run --directory \"{REALTIME_ROOT}\" python -m uvicorn backend.fastapi.main:app --reload --port 8000")
     print(f"3. Dashboard:      uv run --directory \"{REALTIME_ROOT}\" python -m streamlit run dashboard/streamlit/app.py")
-    print(f"4. Docker stack:   docker compose --project-directory \"{REALTIME_ROOT}\" --profile replay up --build")
+    print(f"4. Docker stack:   docker compose --project-directory \"{REALTIME_ROOT}\" up --build")
     return 0
 
 
 def run_pipeline(args: argparse.Namespace | None = None) -> int:
-    args = args or argparse.Namespace(input=None, output=None)
+    args = args or argparse.Namespace()
     exit_code = build_dataset(args)
     if exit_code != 0:
         return exit_code
-    return process_sample(args)
+    return run_command([sys.executable, "-m", "validate-data"], ROOT)
 
 
 def parse_args() -> argparse.Namespace:
@@ -163,12 +163,18 @@ def parse_args() -> argparse.Namespace:
         func=build_dataset
     )
 
-    process_parser = subparsers.add_parser("process-sample", help="Score replay JSONL events with the realtime model.")
+    process_parser = subparsers.add_parser(
+        "process-sample",
+        help="Optional debug: score a local JSONL sample with the realtime model.",
+    )
     process_parser.add_argument("--input", default=None)
     process_parser.add_argument("--output", default=None)
     process_parser.set_defaults(func=process_sample)
 
-    sim_parser = subparsers.add_parser("pull-simulator-sample", help="Fetch simulator JSONL events into realtime serving data.")
+    sim_parser = subparsers.add_parser(
+        "pull-simulator-sample",
+        help="Optional debug/export: write simulator JSONL events into a local sample file.",
+    )
     sim_parser.add_argument("--base-url", default="http://localhost:8010")
     sim_parser.add_argument("--kol-id", default=None)
     sim_parser.add_argument("--limit", type=int, default=500)
@@ -179,9 +185,7 @@ def parse_args() -> argparse.Namespace:
         func=print_commands
     )
 
-    pipeline_parser = subparsers.add_parser("pipeline", help="Build data-pipeline processed data, sync it, and score replay events.")
-    pipeline_parser.add_argument("--input", default=None)
-    pipeline_parser.add_argument("--output", default=None)
+    pipeline_parser = subparsers.add_parser("pipeline", help="Build, sync, and validate processed datasets.")
     pipeline_parser.set_defaults(func=run_pipeline)
 
     parser.set_defaults(func=doctor)

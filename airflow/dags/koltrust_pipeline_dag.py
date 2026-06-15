@@ -20,7 +20,7 @@ default_args = {
 with DAG(
     dag_id="koltrust_batch_pipeline",
     default_args=default_args,
-    description="Crawl, build, validate, sync, and score KOLTrust datasets.",
+    description="Build, sync, and validate KOLTrust datasets.",
     schedule="0 2 * * *",
     start_date=datetime(2026, 1, 1),
     catchup=False,
@@ -36,9 +36,4 @@ with DAG(
         bash_command=f"cd {PROJECT_ROOT} && python -m validate-data",
     )
 
-    process_sample = BashOperator(
-        task_id="process_sample",
-        bash_command=f"cd {PROJECT_ROOT} && python -m process-sample",
-    )
-
-    build_dataset >> validate_data >> process_sample
+    build_dataset >> validate_data

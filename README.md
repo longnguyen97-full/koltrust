@@ -1,30 +1,31 @@
 # KOLTrust
 
-Hệ thống KOLTrust mô phỏng quy trình đánh giá độ tin cậy của KOL/Creator từ dữ liệu mạng xã hội và sự kiện realtime.
+KOLTrust simulates a Big Data workflow for creator trust scoring from social data and realtime livestream events.
 
-## Thành phần chính
+## Main Sources
 
-* **data-pipeline**: Crawl YouTube/TikTok, ETL batch, xây dựng dữ liệu Bronze → Silver → Gold → Serving.
-* **livestream-simulator**: Giả lập livestream và phát sinh realtime events.
-* **realtime-kol-trust**: API, Dashboard, Kafka, Spark, Cassandra, Airflow, MinIO, Prometheus, Grafana.
+* **data-pipeline**: crawl YouTube/TikTok, run batch ETL, and build Bronze -> Silver -> Gold -> Serving datasets.
+* **livestream-simulator**: generate synthetic livestream events from analysis-profile creator seeds.
+* **realtime-kol-trust**: API, dashboard, Kafka, Spark, Cassandra, Airflow, MinIO, Prometheus, and Grafana.
+* **koltrust_common**: small shared package for dataset path resolution.
 
-## Cài đặt
+## Setup
 
 ```bash
 uv sync
 uv run python -m doctor
 ```
 
-## Thu thập dữ liệu
+## Data Collection
 
-Nguồn dữ liệu:
+Input sources:
 
 ```text
 data-pipeline/data/input/vn_channels.txt
 data-pipeline/data/input/tiktok_usernames.txt
 ```
 
-Crawl dữ liệu:
+Crawl raw data:
 
 ```bash
 uv run --directory data-pipeline python crawl_raw_data.py
@@ -39,7 +40,7 @@ data-pipeline/data/raw/
 
 ## ETL & Data Quality
 
-Xây dựng và kiểm tra dataset:
+Build and validate the processed dataset:
 
 ```bash
 uv run python -m build-dataset
@@ -49,95 +50,94 @@ uv run python -m validate-data
 Output:
 
 ```text
-bronze/
-silver/
-gold/
-serving/
+data-pipeline/data/processed/bronze/
+data-pipeline/data/processed/silver/
+data-pipeline/data/processed/gold/
+data-pipeline/data/processed/serving/
 realtime-kol-trust/dataset/
 ```
 
-## Offline Scoring
+## Model/Data Split
 
-Tính điểm độ tin cậy KOL:
-
-```bash
-uv run python -m process-sample
-```
-
-Pipeline đầy đủ:
-
-```bash
-uv run python -m build-dataset
-uv run python -m validate-data
-uv run python -m process-sample
-```
-
-## Livestream Simulator
-
-Khởi chạy:
-
-```bash
-uv run --directory livestream-simulator python -m uvicorn app.main:app --reload --port 8010
-```
-
-Truy cập:
+YouTube/TikTok processed data is split by creator:
 
 ```text
-http://localhost:8010
-http://localhost:8010/docs
+train split            -> model training
+eval split             -> offline evaluation
+analysis_profile split -> analysis and simulator profile seeds
 ```
 
-Lấy dữ liệu mẫu:
+The simulator can reuse creator names/profile fields from `analysis_profile`, but it generates fresh live metrics/events. Realtime prediction does not use the training labels as input.
+
+## Offline Debug Commands
+
+These commands are optional smoke tests, not the main realtime path:
 
 ```bash
+uv run python -m process-sample
 uv run python -m pull-simulator-sample --kol-id yt_finance_04 --limit 500
 ```
 
-## API & Dashboard
+Main realtime flow:
+
+```text
+simulator API
+-> replay-producer
+-> Kafka kol_raw_events
+-> Spark Streaming
+-> MinIO raw/processed/serving layers
+-> Cassandra serving table
+-> API/dashboard
+```
+
+## Local Services
 
 ```bash
+uv run --directory livestream-simulator python -m uvicorn app.main:app --reload --port 8010
 uv run --directory realtime-kol-trust python -m uvicorn backend.fastapi.main:app --reload --port 8000
 uv run --directory realtime-kol-trust python -m streamlit run dashboard/streamlit/app.py
 ```
 
 ```text
+Simulator: http://localhost:8010/docs
 API:       http://localhost:8000/docs
 Dashboard: http://localhost:8501
 ```
 
 ## Full Stack Docker
 
-Khởi động toàn bộ hệ thống:
+Start the full stack:
 
 ```bash
 docker compose --project-directory realtime-kol-trust up --build
 ```
 
-Bao gồm:
+Services:
 
 * Kafka + Kafka UI
 * Cassandra
 * Spark Streaming
 * FastAPI
 * Streamlit
+* Simulator + replay producer
 * Airflow
 * MinIO
 * Prometheus
 * Grafana
 
-Các dịch vụ:
+URLs:
 
 ```text
 API:        http://localhost:8000/docs
 Dashboard:  http://localhost:8501
 Kafka UI:   http://localhost:8080
 Airflow:    http://localhost:8081
-MinIO:      http://localhost:9001
+MinIO:      http://localhost:9002
 Prometheus: http://localhost:9090
 Grafana:    http://localhost:3000
 ```
 
-Dừng hệ thống:
+Stop:
 
 ```bash
 docker compose --project-directory realtime-kol-trust down
@@ -145,7 +145,7 @@ docker compose --project-directory realtime-kol-trust down
 
 ## MinIO
 
-Publish dataset:
+Publish the batch dataset:
 
 ```bash
 uv run python -m publish-minio
@@ -159,26 +159,23 @@ koltrust-processed
 koltrust-serving
 ```
 
-## CLI Nhanh
+## Quick CLI
 
 ```bash
 uv run python -m doctor
 uv run python -m build-dataset
 uv run python -m validate-data
-uv run python -m process-sample
 uv run python -m pipeline
 uv run python -m publish-minio
 ```
 
-## Tài liệu
+## Docs
 
 ```text
+documents/SOURCE_LAYOUT.md
 documents/PRESENTATION.md
 documents/API_DOCS.md
 documents/MONITORING.md
 documents/GOVERNANCE.md
 airflow/dags/koltrust_pipeline_dag.py
 ```
-
-## Kiến trúc tổng thể
-![Mô tả ảnh](documents/kien-truc-tong-the.png)
