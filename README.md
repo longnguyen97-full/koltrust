@@ -179,3 +179,6 @@ documents/MONITORING.md
 documents/GOVERNANCE.md
 airflow/dags/koltrust_pipeline_dag.py
 ```
+
+## Kiến trúc tổng thể
+![Mô tả ảnh](documents/kien-truc-tong-the.png)
