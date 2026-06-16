@@ -121,11 +121,13 @@ services:
       dockerfile: realtime-kol-trust/docker/Dockerfile.app
     depends_on:
       - api
+      - simulator
     ports:
       - "8501:8501"
     environment:
       APP_ENV: dev
-      API_BASE_URL: http://api:8000
+      API_BASE_URL: http://simulator:8010
+      SIMULATOR_BASE_URL: http://simulator:8010
     command: ["streamlit", "run", "dashboard/streamlit/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
     volumes:
       - .:/app
