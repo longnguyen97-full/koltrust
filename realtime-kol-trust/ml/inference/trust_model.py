@@ -98,7 +98,13 @@ def load_sentiment_model() -> dict[str, Any] | None:
     if not SENTIMENT_MODEL_PATH.exists():
         return None
     try:
-        return joblib.load(SENTIMENT_MODEL_PATH)
+        payload = joblib.load(SENTIMENT_MODEL_PATH)
+        model = payload.get("model") if isinstance(payload, dict) else None
+        classifier = getattr(model, "named_steps", {}).get("classifier") if model is not None else None
+        if classifier is not None and classifier.__class__.__name__ == "LogisticRegression":
+            if not hasattr(classifier, "multi_class"):
+                classifier.multi_class = "auto"
+        return payload
     except Exception:
         return None
 
@@ -132,13 +138,16 @@ def model_sentiment_score(text: str) -> float | None:
     if model is None:
         return None
     label_to_score = payload.get("label_to_score") or DEFAULT_LABEL_TO_SCORE
-    probabilities = getattr(model, "predict_proba", None)
-    if probabilities:
-        classes = list(getattr(model, "classes_", []))
-        scores = model.predict_proba([text])[0]
-        return clamp(sum(float(prob) * float(label_to_score.get(label, 0.5)) for label, prob in zip(classes, scores)))
-    label = str(model.predict([text])[0])
-    return clamp(float(label_to_score.get(label, 0.5)))
+    try:
+        probabilities = getattr(model, "predict_proba", None)
+        if probabilities:
+            classes = list(getattr(model, "classes_", []))
+            scores = model.predict_proba([text])[0]
+            return clamp(sum(float(prob) * float(label_to_score.get(label, 0.5)) for label, prob in zip(classes, scores)))
+        label = str(model.predict([text])[0])
+        return clamp(float(label_to_score.get(label, 0.5)))
+    except Exception:
+        return None
 
 
 def sentiment_label_from_score(score: float) -> str:
@@ -250,8 +259,11 @@ def model_trust_score(features: dict[str, Any]) -> float | None:
     categorical_features = payload.get("categorical_features") or TRUST_CATEGORICAL_FEATURES
     row = {name: features.get(name, 0.0) for name in numeric_features}
     row.update({name: features.get(name, "unknown") for name in categorical_features})
-    prediction = float(model.predict(pd.DataFrame([row]))[0])
-    return clamp(prediction, 0.0, 100.0)
+    try:
+        prediction = float(model.predict(pd.DataFrame([row]))[0])
+        return clamp(prediction, 0.0, 100.0)
+    except Exception:
+        return None
 
 
 def predict_kol_trust(event: dict[str, Any]) -> dict[str, Any]:
