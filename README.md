@@ -2,6 +2,18 @@
 
 KOLTrust là hệ thống mô phỏng quy trình Big Data nhằm đánh giá mức độ tin cậy (Trust Score) của KOL/Creator dựa trên dữ liệu mạng xã hội và các sự kiện livestream theo thời gian thực.
 
+## Demo
+
+🌐 Live Demo: https://huggingface.co/spaces/liamxdev/koltrust-simulator
+
+Các tính năng chính:
+
+- Phân tích và chấm điểm độ tin cậy (Trust Score) cho creator trên TikTok và YouTube.
+- Dashboard trực quan với thống kê tổng quan, phân phối mức độ tin cậy và bảng xếp hạng creator.
+- Bộ lọc theo nền tảng, mức độ tin cậy, nguồn điểm số và ngưỡng lượt xem.
+
+Lưu ý: Dữ liệu KOL trong demo chỉ phục vụ mục đích mô phỏng và nghiên cứu, không phản ánh đánh giá chính thức đối với bất kỳ cá nhân hoặc tổ chức nào.
+
 ## Thành phần chính
 
 * **data-pipeline**: Thu thập dữ liệu từ YouTube/TikTok, thực hiện ETL theo lô (Batch ETL) và xây dựng các tầng dữ liệu Bronze → Silver → Gold → Serving.
